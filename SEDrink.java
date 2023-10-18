@@ -378,7 +378,40 @@ public class SEDrink {
                     }
                 }
             } else { // DESC // SELECTION
+                if (isASC) { // ASC // INSERTION 
+                    for (int i = 1; i < dataSet.size(); i++) {
+                        Object[] temp = dataSet.get(i);
                 
+                        int j = 0;
+                        for (j = i-1; j >= 0 ; j--) {
+                            Object[] data = dataSet.get(j);
+    
+                            if (compareTo(data[dataIndex], temp[dataIndex]) <= 0) {
+                                break;
+                            }
+    
+                            dataSet.set(j+1, data);
+                        }
+                        dataSet.set(j+1, temp);
+                    }
+                } else { // DESC // SELECTION
+                    int n = dataSet.size();
+    
+                    for (int i = 0; i < n-1; i++) {
+                        int max_idx = i;
+                        for (int j = i+1; j < n; j++) {
+                            Object[] data = dataSet.get(j);
+                            Object[] data_next = dataSet.get(max_idx);
+                            if (compareTo(data[dataIndex], data_next[dataIndex]) > 0) {
+                                max_idx = j;
+                            }
+                        } 
+            
+                        Object[] temp = dataSet.get(max_idx);
+                        dataSet.set(max_idx, dataSet.get(i));
+                        dataSet.set(i, temp);
+                    }
+                }
             }
         }
     }
