@@ -20,10 +20,10 @@ import java.util.Scanner;
 
 public class SEDrink {
     
-    static File machineFile = new File("./machine.txt");
-    static File adminFile = new File("./login.txt");
-    static File menuFile = new File("./Menu.txt");
-    static File orderFile = new File("./Order.txt");
+    static File machineFile = new File("/workspaces/SEDrink/Machine.txt");
+    static File adminFile = new File("/workspaces/SEDrink/Login.txt");
+    static File menuFile = new File("/workspaces/SEDrink/Menu.txt");
+    static File orderFile = new File("/workspaces/SEDrink/Order.txt");
 
     static LinkedList<Object[]> adminDataSet = new LinkedList<>();
     static LinkedList<Object[]> machineDataSet = new LinkedList<>();
@@ -340,9 +340,6 @@ public class SEDrink {
                     for (int j = 0; j < dataSet.size()-i-1; j++) {
                         Object[] data = dataSet.get(j);
                         Object[] data_next = dataSet.get(j+1);
-
-                        System.out.println(data[dataIndex].toString());
-
                         if (Double.parseDouble(data[dataIndex].toString()) > Double.parseDouble(data_next[dataIndex].toString()) ) {
                             Object[] temp = data;
                             dataSet.set(j, data_next);
@@ -357,14 +354,15 @@ public class SEDrink {
                 int gap = dataSet.size()/2;
                 while (gap > 0) {
                     for (int index = gap; index < dataSet.size(); index++) {
-                        int temp = Integer.parseInt(dataSet.get(index)[dataIndex].toString());
-                        int j = index;
-                        while (j >= gap && Integer.parseInt(dataSet.get(j-gap)[dataIndex].toString()) > temp) {
-                            dataSet.set(j,dataSet.get(j-gap));
+                        Object[] temp = dataSet.get(index);
+                        int j = index - gap;
+                        while (j >= 0 && Double.parseDouble(dataSet.get(j)[dataIndex].toString()) < Double.parseDouble(temp[dataIndex].toString())) {
+                            dataSet.set(j+gap,dataSet.get(j));
                             j -= gap;
                         }
-                        gap /= 2;
+                        dataSet.set(j+gap, temp);
                     }
+                    gap /= 2;
                 }
             }
             
@@ -374,7 +372,6 @@ public class SEDrink {
                     for (int j = i-1; j < dataSet.size(); j++) {
                         Object[] data = dataSet.get(i);
                         Object[] data_next = dataSet.get(j);
-
                         if (compareTo(data_next[dataIndex], data[dataIndex]) < 0) {
                             
                         }
@@ -537,8 +534,8 @@ public class SEDrink {
                 Random r = new Random();
                 char c1 = (char)(r.nextInt(26) + 'A');
                 char c2 = (char)(r.nextInt(26) + 'A');
-                String pin = String.valueOf(r.nextInt(1000,9999))+c1+c2;
-            
+                // String pin = String.valueOf(r.nextInt(1000,9999))+c1+c2;
+                String pin = String.valueOf(r.nextInt(9999))+c1+c2;
                 System.out.println("Your PIN is : " + pin);
                 System.out.println("-----------------------");
                 Object[] dataOrder = {
@@ -547,7 +544,7 @@ public class SEDrink {
                     "-",
                     telephone.substring(0, 3)+"-"+telephone.substring(3,6)+"-"+telephone.substring(6),
                     pin,
-                    "0",
+                    "-",
                     "-"
                 };
                 orderDataSet.add(dataOrder);
@@ -913,7 +910,7 @@ public class SEDrink {
                                         }
 
                                         r = new Random();
-                                        String newPassword = String.valueOf((int)r.nextInt(000000,999999));
+                                        String newPassword = String.valueOf((int)r.nextInt(999999));
 
 
                                         data[4] = data[4].toString().substring(0,3) + newPassword.substring(0,2) + data[4].toString().substring(5,11) + newPassword.substring(2) + data[4].toString().substring(15);
